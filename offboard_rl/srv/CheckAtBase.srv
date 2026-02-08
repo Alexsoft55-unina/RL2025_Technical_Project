@@ -1,0 +1,9 @@
+# REQUEST
+float64 panda_x
+float64 panda_y
+float64 panda_z
+---
+# RESPONSE
+bool is_at_base
+string message
+float64 distance_from_panda

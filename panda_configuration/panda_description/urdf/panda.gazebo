@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="gz_ros2_control" params="
+   controller_parameters
+  ">
+    <gazebo>
+      <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>${controller_parameters}</parameters>
+      </plugin>
+    </gazebo>
+    
+    <gazebo>
+      <plugin
+        filename="libgz-sim-detachable-joint-system.so"
+        name="gz::sim::systems::DetachableJoint">
+        <parent_link>panda_link7</parent_link>
+        <child_model>scatola</child_model>
+        <child_link>scatola_link</child_link>
+        <initially_attached>0</initially_attached>
+        <output_topic>/panda/state</output_topic>
+        <attach_topic>/panda/attach</attach_topic>
+        <detach_topic>/panda/detach</detach_topic>
+        <joint_type>fixed</joint_type>
+      </plugin>
+    </gazebo>
+    
+  </xacro:macro>
+
+
+</robot>

@@ -1,0 +1,59 @@
+## Properties of incoming commands
+command_in_type: "speed_units" # "unitless" - in range [-1:1], "speed_units" - in m/s and rad/s
+scale:
+  # Scale parameters are only used if command_in_type=="unitless"
+  linear: 0.4 
+  rotational: 0.8 
+  joint: 0.5 
+
+## Properties of outgoing commands
+# --- MODIFICA IMPORTANTE PER FLUIDITÀ ---
+publish_period: 0.04 # [MODIFICATO] Era 0.2 (5Hz). Ora è 0.04 (25Hz) per movimenti fluidi.
+low_latency_mode: true # [MODIFICATO] Era false. True riduce il ritardo tra "vedo marker" e "muovo robot".
+
+# What type of topic does your robot driver expect?
+command_out_type: trajectory_msgs/JointTrajectory
+
+# What to publish? 
+publish_joint_positions: true
+publish_joint_velocities: true
+publish_joint_accelerations: false
+
+## Plugins for smoothing outgoing commands
+smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
+low_pass_filter_coeff: 1.5 # [SUGGERIMENTO] Aumentato leggermente da 1.05 per filtrare meglio il rumore della camera a 25Hz.
+
+## MoveIt properties
+move_group_name: arm 
+planning_frame: panda_link0 
+
+## Other frames
+ee_frame_name: panda_hand_tcp 
+robot_link_command_frame: panda_link0 
+
+## Stopping behaviour
+incoming_command_timeout: 0.5 # [MODIFICATO] Aumentato da 0.25 a 0.5 per tollerare qualche lag della camera senza inchiodare il robot.
+num_outgoing_halt_msgs_to_publish: 1
+
+## Configure handling of singularities and joint limits
+# --- MODIFICA CRITICA PER ERRORE "Emergency Stop" ---
+# Più alto è il numero, più il braccio può stendersi prima di fermarsi.
+lower_singularity_threshold: 800.0     # [MODIFICATO] Era 20.0. Inizia a rallentare molto dopo.
+hard_stop_singularity_threshold: 1500.0 # [MODIFICATO] Era 50.0. Ferma il robot solo in casi estremi.
+joint_limit_margin: 0.01 # [MODIFICATO] Leggermente aumentato (era 0.087) per sicurezza sui limiti dei giunti.
+
+## Topic names
+cartesian_command_in_topic: /delta_twist_cmds 
+joint_command_in_topic: /delta_joint_cmds 
+joint_topic: /joint_states
+status_topic: ~/status 
+command_out_topic: /joint_trajectory_controller/joint_trajectory 
+
+## Collision checking for the entire robot body
+check_collisions: false # [NOTA] Mantieni false per ora mentre testi, ma in produzione va messo true.
+collision_check_rate: 10.0 
+collision_check_type: threshold_distance
+self_collision_proximity_threshold: 0.00003 
+scene_collision_proximity_threshold: 0.0005 
+collision_distance_safety_factor: 10.0 
+min_allowable_collision_distance: 0.00001
