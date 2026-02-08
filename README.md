@@ -26,13 +26,10 @@ cd .. \
 cd .. \
 ros2 launch panda_execution panda_spawn.launch.py
 ```
-then you must separetely launch the single node for the management of the drone
+then you must open a new terminal and insert the following commands
 ```
-ros2 run offboard_rl go_to_point_server
-ros2 run offboard_rl trajectory_drone_manager
+source install/setup.bash \
+ros2 launch offboard_rl monitor.launch.py
 ```
-to make the simulation start you must envoy a message on the panda control manager
-```
-ros2 topic pub --once /panda_command std_msgs/msg/Int32 "{data: 100}"
-```
+
 
