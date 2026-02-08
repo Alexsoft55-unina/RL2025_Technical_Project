@@ -1,4 +1,4 @@
-# RL2025_Progetto_Finale
+# RL2025_Technical_Project
 go to the workspace directory and build the packages
 ```
 colcon build && source install/setup.bash
@@ -36,4 +36,3 @@ to make the simulation start you must envoy a message on the panda control manag
 ros2 topic pub --once /panda_command std_msgs/msg/Int32 "{data: 100}"
 ```
 
-# RL2025_Technical_Project
